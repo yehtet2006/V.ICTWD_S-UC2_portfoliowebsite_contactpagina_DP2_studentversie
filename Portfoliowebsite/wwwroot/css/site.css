@@ -33,9 +33,14 @@ input, textarea {
     display: inline-block;
     padding: .75rem 1rem;
     background: #dcdcdc;
-    color: #f0f0f0;
+    color: #000000;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.send-button:hover {
+    background: #ff5959;
+    color:white;
 }
 
 .hp {
@@ -50,4 +55,14 @@ input, textarea {
 #liveStatus {
     position: absolute;
     left: -9999px;
+}
+
+.input {
+    label {
+        color: black;
+    }
+}
+
+.header {
+    color: black;
 }
