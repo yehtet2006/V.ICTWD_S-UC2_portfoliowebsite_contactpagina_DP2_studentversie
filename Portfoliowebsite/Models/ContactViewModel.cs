@@ -9,7 +9,7 @@ public class ContactViewModel
     public string Email { get; set; }
     
     [Required(ErrorMessage = "Er moet een naam bevatten")]
-    [StringLength(100, ErrorMessage = "De naam mag niet langer zijn dan 100 tekens")]
+    [StringLength(50, ErrorMessage = "De naam mag niet langer zijn dan 50 tekens")]
     public string Name { get; set; }
     
     [StringLength(150, ErrorMessage = "Het onderwerp mag niet langer zijn dan 150 tekens")]
