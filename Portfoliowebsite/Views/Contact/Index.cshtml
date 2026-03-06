@@ -1,35 +1,77 @@
-﻿@{
+﻿@model ContactViewModel
+
+@{
     ViewData["Title"] = "Contact";
 }
 
-<h1>Contact</h1>
+<h1 class="header">Contact</h1>
 
-<form id="contactForm" asp-action="Index" method="post" novalidate>
+<form id="contactForm" asp-action="Index" method="post">
+
     @Html.AntiForgeryToken()
-    <div class="hp">
-        <label for="website">Laat dit veld leeg</label>
-        <input type="text" id="website" name="website" value="" />
+
+    <!-- Honeypot veld -->
+    <div class="hp" style="display:none;">
+        <label asp-for="Website">Laat dit veld leeg</label>
+        <input asp-for="Website" tabindex="-1" autocomplete="off"/>
     </div>
-    <div>
-        <input id="Name" name="Name" placeholder="Naam" tabindex="-1" />
-        <div id="nameErr" class="error"></div>
+
+    <div class="input">
+        <label asp-for="Name">Naam</label>
+        <input asp-for="Name"
+               inputmode="text"
+               maxlength="50"
+               placeholder="Annie van Dijk"
+               aria-describedby="nameHelp"
+        />
+        <span id="nameHelp" class="sr-only">
+            Vul uw voor- en achternaam in (letters en spaties, max. 50).
+        </span>
+        <span asp-validation-for="Name" class="error"></span>
     </div>
-    <div>
-        <label for="EmailX">E-mail</label>
-        <input id="Email" name="Email" placeholder="naam@domein.nl" />
-        <div id="emailErr" class="error"></div>
+
+    <div class="input">
+        <label asp-for="Email">E-mail</label>
+        <input asp-for="Email" 
+               inputmode="email"
+               placeholder="naam@domein.nl"
+               aria-describedby="emailHelp"
+        />
+        <span id="emailHelp" class="sr-only">
+            Vul een geldig e-mailadres in.
+        </span>
+        <span asp-validation-for="Email" class="error"></span>
     </div>
-    <div>
-        <label for="Subject">Onderwerp</label>
-        <input id="Subject" name="Subject" placeholder="Onderwerp" />
+
+    <div class="input">
+        <label asp-for="Subject">Onderwerp</label>
+        <input asp-for="Subject" 
+               inputmode="text"
+               maxlength="150"
+               placeholder="Onderwerp"
+               aria-describedby="subjectHelp"/>
+        <span id="subjectHelp" class="sr-only">
+            Alleen letters, cijfers, spaties en leestekens (max. 150 tekens).
+        </span>
+        <span asp-validation-for="Subject" class="error"></span>
     </div>
-    <div>
-        <label for="Message" aria-hidden="true">Bericht</label> 
-        <textarea id="Message" name="Message" rows="5" placeholder="Je bericht"></textarea>
-        <div id="msgErr" class="error"></div>
+
+    <div class="input">
+        <label asp-for="Message">Bericht</label>
+        <textarea asp-for="Message" rows="5" inputmode="text" maxlength="1000" placeholder="Voeg een bericht toe" aria-describedby="messageHelp"></textarea>
+        <span id="messageHelp" class="sr-only">
+            Voer hier uw bericht in (max. 1000 tekens). Alleen letters, cijfers, spaties en leestekens zijn toegestaan.
+        </span>
+        <span asp-validation-for="Message" class="error"></span>
     </div>
-    <div id="liveStatus"></div>
+
+    <div id="liveStatus" aria-live="polite"></div>
+
     <div class="send-button" role="button" onclick="document.getElementById('contactForm').submit()">
         Versturen
     </div>
 </form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

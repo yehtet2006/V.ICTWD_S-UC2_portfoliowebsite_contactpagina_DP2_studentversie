@@ -9,8 +9,9 @@ namespace Portfoliowebsite.Services
         {
             var smtp = new SmtpClient("smtp.mailtrap.io", 2525)
             {
-                EnableSsl = false,
-                Credentials = new NetworkCredential("", "") // TODO: vervang met je eigen mailtrap credentials
+                EnableSsl = true,
+                // Mailtrap gebruikt geen SSL, dus we zetten het uit
+                Credentials = new NetworkCredential("dfe430e3142769", "4f0c583ffe0815"),
             };
 
             var mail = new MailMessage();

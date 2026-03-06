@@ -1,31 +1,42 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Portfoliowebsite.Models;
 using Portfoliowebsite.Services;
 
 namespace Portfoliowebsite.Controllers
 {
     public class ContactController : Controller
     {
-
         private readonly IEmailSender _email;
         public ContactController(IEmailSender email) => _email = email;
 
-        public IActionResult Index() => View();
+        // GET: Contact
+        public IActionResult Index() => View(new ContactViewModel());
 
         [HttpPost]
-        public async Task<IActionResult> Index(string Name, string Email, string Subject, string Message)
+        [ValidateAntiForgeryToken] // Bescherming tegen CSRF-aanvallen
+        public async Task<IActionResult> Index(ContactViewModel model)
         {
-            await _email.SendAsync(Name, Email, Subject, Message);
+            // Honeypot veld controleren
+            if (!string.IsNullOrEmpty(model.Website))
+            {
+                return BadRequest("Spam detected");
+            }
+            
+            if(model.Name == null || model.Email == null || model.Subject == null || model.Message == null)
+            {
+                ModelState.AddModelError(string.Empty, "All fields are required.");
+                return View(model);
+            }
+            
+            await _email.SendAsync(model.Name, model.Email, model.Subject, model.Message);
 
-            TempData["ThanksName"] = Name;
-            TempData["ThanksEmail"] = Email;
-            TempData["ThanksMessage"] = Message;
+            TempData["ThanksName"] = model.Name;
+            TempData["ThanksEmail"] = model.Email;
+            TempData["ThanksMessage"] = model.Message;
 
             return RedirectToAction(nameof(Thanks));
         }
 
-        public IActionResult Thanks()
-        {
-            return View();
-        }
+        public IActionResult Thanks() => View();
     }
 }
